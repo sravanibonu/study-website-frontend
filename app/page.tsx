@@ -313,33 +313,225 @@
 // }
 
 
+// "use client";
+
+// import Link from "next/link";
+
+// export default function HomePage() {
+//   return (
+//     <div className="min-h-screen bg-gray-50 text-gray-800">
+
+//       {/* 🔷 NAVBAR */}
+//       <nav className="flex justify-between items-center px-8 py-5 bg-white shadow-sm sticky top-0 z-50">
+//         <h1 className="text-2xl font-bold text-blue-600">StudyWeb</h1>
+//         <div className="space-x-6 hidden md:block">
+//           <Link href="/" className="hover:text-blue-600">Home</Link>
+//           <Link href="/tests" className="hover:text-blue-600">Tests</Link>
+//           <Link href="/about" className="hover:text-blue-600">About</Link>
+//           <Link href="/contact" className="hover:text-blue-600">Contact</Link>
+//         </div>
+//         <div className="space-x-4">
+//           <Link
+//             href="/login"
+//             className="px-4 py-2 rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition"
+//           >
+//             Login
+//           </Link>
+//           <Link
+//             href="/register"
+//             className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+//           >
+//             Register
+//           </Link>
+//         </div>
+//       </nav>
+
+//       {/* 🔵 HERO SECTION */}
+//       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-28 px-6 text-center">
+//         <h1 className="text-5xl font-bold mb-6 leading-tight">
+//           Crack Competitive Exams <br /> With Smart Practice 🚀
+//         </h1>
+//         <p className="text-lg max-w-2xl mx-auto mb-10">
+//           Practice unlimited MCQs, get instant performance insights,
+//           detailed explanations, and compete with thousands of students.
+//         </p>
+
+//         <Link
+//           href="/register"
+//           className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold shadow-lg hover:scale-105 transition"
+//         >
+//           Start Free Now
+//         </Link>
+//       </section>
+
+//       {/* 🟢 FEATURES */}
+//       <section className="py-24 px-6 max-w-6xl mx-auto">
+//         <h2 className="text-4xl font-bold text-center mb-16">
+//           Why Choose StudyWeb?
+//         </h2>
+
+//         <div className="grid md:grid-cols-3 gap-10">
+//           <FeatureCard
+//             title="Unlimited Practice"
+//             desc="Access thousands of MCQs with detailed solutions."
+//           />
+//           <FeatureCard
+//             title="Instant Analytics"
+//             desc="Track accuracy, speed & performance instantly."
+//           />
+//           <FeatureCard
+//             title="Live Rankings"
+//             desc="Compete with real aspirants & improve daily."
+//           />
+//         </div>
+//       </section>
+
+//       {/* 🟡 POPULAR TEST SERIES */}
+//       <section className="bg-white py-24 px-6">
+//         <h2 className="text-4xl font-bold text-center mb-16">
+//           Popular Test Series
+//         </h2>
+
+//         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+//           <TestCard title="SSC CGL Mock Series" questions="5000+ Questions" />
+//           <TestCard title="Banking PO Test Series" questions="4200+ Questions" />
+//           <TestCard title="UPSC Prelims Practice" questions="8000+ Questions" />
+//         </div>
+//       </section>
+
+//       {/* 🟣 HOW IT WORKS */}
+//       <section className="py-24 px-6 max-w-6xl mx-auto">
+//         <h2 className="text-4xl font-bold text-center mb-16">
+//           How It Works
+//         </h2>
+
+//         <div className="grid md:grid-cols-4 gap-8 text-center">
+//           <Step number="1" text="Create Account" />
+//           <Step number="2" text="Choose Test Series" />
+//           <Step number="3" text="Attempt Test" />
+//           <Step number="4" text="View Rank & Analysis" />
+//         </div>
+//       </section>
+
+//       {/* 🔴 CALL TO ACTION */}
+//       <section className="bg-blue-600 text-white text-center py-20 px-6">
+//         <h2 className="text-4xl font-bold mb-6">
+//           Ready to Boost Your Preparation? 💪
+//         </h2>
+//         <p className="mb-8 text-lg">
+//           Join thousands of students already preparing smarter.
+//         </p>
+//         <Link
+//           href="/register"
+//           className="bg-white text-blue-600 px-10 py-4 rounded-xl font-semibold shadow-lg hover:scale-105 transition"
+//         >
+//           Join Now
+//         </Link>
+//       </section>
+
+//       {/* ⚫ FOOTER */}
+//       <footer className="bg-black text-white py-10">
+//         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-8 text-sm">
+//           <div>
+//             <h3 className="font-semibold text-lg mb-4">StudyWeb</h3>
+//             <p>Smart online test platform for competitive exam preparation.</p>
+//           </div>
+
+//           <div>
+//             <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
+//             <ul className="space-y-2">
+//               <li><Link href="/about">About Us</Link></li>
+//               <li><Link href="/contact">Contact</Link></li>
+//               <li><Link href="/privacy">Privacy Policy</Link></li>
+//             </ul>
+//           </div>
+
+//           <div>
+//             <h3 className="font-semibold text-lg mb-4">Contact</h3>
+//             <p>Email: support@studyweb.com</p>
+//             <p>Phone: +91 98765 43210</p>
+//           </div>
+//         </div>
+
+//         <div className="text-center mt-10 text-gray-400 text-sm">
+//           © {new Date().getFullYear()} StudyWeb. All rights reserved.
+//         </div>
+//       </footer>
+//     </div>
+//   );
+// }
+
+// /* 🔹 Reusable Components */
+
+// function FeatureCard({ title, desc }: { title: string; desc: string }) {
+//   return (
+//     <div className="bg-gray-100 p-8 rounded-2xl shadow hover:shadow-xl transition">
+//       <h3 className="text-xl font-semibold mb-4">{title}</h3>
+//       <p className="text-gray-600">{desc}</p>
+//     </div>
+//   );
+// }
+
+// function TestCard({ title, questions }: { title: string; questions: string }) {
+//   return (
+//     <div className="bg-gray-50 p-8 rounded-2xl shadow hover:shadow-xl transition">
+//       <h3 className="text-lg font-bold mb-2">{title}</h3>
+//       <p className="text-gray-600 mb-6">{questions}</p>
+//       <Link
+//         href="/login"
+//         className="text-blue-600 font-semibold hover:underline"
+//       >
+//         Attempt Now →
+//       </Link>
+//     </div>
+//   );
+// }
+
+// function Step({ number, text }: { number: string; text: string }) {
+//   return (
+//     <div>
+//       <div className="bg-blue-600 text-white w-14 h-14 mx-auto rounded-full flex items-center justify-center font-bold mb-4 text-lg">
+//         {number}
+//       </div>
+//       <p className="font-semibold">{text}</p>
+//     </div>
+//   );
+// }
+
+
 "use client";
 
 import Link from "next/link";
+import { BookOpen, BarChart3, Trophy } from "lucide-react";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 text-gray-800">
 
       {/* 🔷 NAVBAR */}
-      <nav className="flex justify-between items-center px-8 py-5 bg-white shadow-sm sticky top-0 z-50">
-        <h1 className="text-2xl font-bold text-blue-600">StudyWeb</h1>
-        <div className="space-x-6 hidden md:block">
-          <Link href="/" className="hover:text-blue-600">Home</Link>
-          <Link href="/tests" className="hover:text-blue-600">Tests</Link>
-          <Link href="/about" className="hover:text-blue-600">About</Link>
-          <Link href="/contact" className="hover:text-blue-600">Contact</Link>
+      <nav className="flex justify-between items-center px-8 py-5 bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <h1 className="text-2xl font-bold text-blue-600 tracking-wide">
+          StudyWeb
+        </h1>
+
+        <div className="space-x-8 hidden md:block font-medium">
+          <Link href="/" className="hover:text-blue-600 transition">Home</Link>
+          <Link href="/tests" className="hover:text-blue-600 transition">Tests</Link>
+          <Link href="/about" className="hover:text-blue-600 transition">About</Link>
+          <Link href="/contact" className="hover:text-blue-600 transition">Contact</Link>
         </div>
-        <div className="space-x-4">
+
+        <div className="space-x-3">
           <Link
             href="/login"
-            className="px-4 py-2 rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition"
+            className="px-5 py-2 rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition"
           >
             Login
           </Link>
+
           <Link
             href="/register"
-            className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+            className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-md transition"
           >
             Register
           </Link>
@@ -347,18 +539,19 @@ export default function HomePage() {
       </nav>
 
       {/* 🔵 HERO SECTION */}
-      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-28 px-6 text-center">
-        <h1 className="text-5xl font-bold mb-6 leading-tight">
+      <section className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-32 px-6 text-center">
+        <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
           Crack Competitive Exams <br /> With Smart Practice 🚀
         </h1>
-        <p className="text-lg max-w-2xl mx-auto mb-10">
-          Practice unlimited MCQs, get instant performance insights,
-          detailed explanations, and compete with thousands of students.
+
+        <p className="text-lg max-w-2xl mx-auto mb-10 opacity-90">
+          Practice unlimited MCQs, track performance, get instant analysis
+          and compete with thousands of aspirants.
         </p>
 
         <Link
           href="/register"
-          className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold shadow-lg hover:scale-105 transition"
+          className="bg-white text-blue-600 px-10 py-4 rounded-xl font-semibold shadow-xl hover:scale-105 transition"
         >
           Start Free Now
         </Link>
@@ -371,31 +564,51 @@ export default function HomePage() {
         </h2>
 
         <div className="grid md:grid-cols-3 gap-10">
+
           <FeatureCard
+            icon={<BookOpen size={28} />}
             title="Unlimited Practice"
-            desc="Access thousands of MCQs with detailed solutions."
+            desc="Access thousands of MCQs with detailed explanations."
           />
+
           <FeatureCard
+            icon={<BarChart3 size={28} />}
             title="Instant Analytics"
-            desc="Track accuracy, speed & performance instantly."
+            desc="Track accuracy, speed and improvement in real-time."
           />
+
           <FeatureCard
+            icon={<Trophy size={28} />}
             title="Live Rankings"
-            desc="Compete with real aspirants & improve daily."
+            desc="Compete with aspirants and climb the leaderboard."
           />
+
         </div>
       </section>
 
-      {/* 🟡 POPULAR TEST SERIES */}
+      {/* 🟡 TEST SERIES */}
       <section className="bg-white py-24 px-6">
         <h2 className="text-4xl font-bold text-center mb-16">
           Popular Test Series
         </h2>
 
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
-          <TestCard title="SSC CGL Mock Series" questions="5000+ Questions" />
-          <TestCard title="Banking PO Test Series" questions="4200+ Questions" />
-          <TestCard title="UPSC Prelims Practice" questions="8000+ Questions" />
+
+          <TestCard
+            title="SSC CGL Mock Series"
+            questions="5000+ Questions"
+          />
+
+          <TestCard
+            title="Banking PO Test Series"
+            questions="4200+ Questions"
+          />
+
+          <TestCard
+            title="UPSC Prelims Practice"
+            questions="8000+ Questions"
+          />
+
         </div>
       </section>
 
@@ -406,35 +619,42 @@ export default function HomePage() {
         </h2>
 
         <div className="grid md:grid-cols-4 gap-8 text-center">
+
           <Step number="1" text="Create Account" />
           <Step number="2" text="Choose Test Series" />
           <Step number="3" text="Attempt Test" />
           <Step number="4" text="View Rank & Analysis" />
+
         </div>
       </section>
 
-      {/* 🔴 CALL TO ACTION */}
+      {/* 🔴 CTA */}
       <section className="bg-blue-600 text-white text-center py-20 px-6">
         <h2 className="text-4xl font-bold mb-6">
           Ready to Boost Your Preparation? 💪
         </h2>
-        <p className="mb-8 text-lg">
-          Join thousands of students already preparing smarter.
+
+        <p className="mb-8 text-lg opacity-90">
+          Join thousands of students preparing smarter.
         </p>
+
         <Link
           href="/register"
-          className="bg-white text-blue-600 px-10 py-4 rounded-xl font-semibold shadow-lg hover:scale-105 transition"
+          className="bg-white text-blue-600 px-10 py-4 rounded-xl font-semibold shadow-xl hover:scale-105 transition"
         >
           Join Now
         </Link>
       </section>
 
       {/* ⚫ FOOTER */}
-      <footer className="bg-black text-white py-10">
+      <footer className="bg-black text-white py-12">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-8 text-sm">
+
           <div>
             <h3 className="font-semibold text-lg mb-4">StudyWeb</h3>
-            <p>Smart online test platform for competitive exam preparation.</p>
+            <p>
+              Smart online test platform for competitive exam preparation.
+            </p>
           </div>
 
           <div>
@@ -451,49 +671,82 @@ export default function HomePage() {
             <p>Email: support@studyweb.com</p>
             <p>Phone: +91 98765 43210</p>
           </div>
+
         </div>
 
         <div className="text-center mt-10 text-gray-400 text-sm">
           © {new Date().getFullYear()} StudyWeb. All rights reserved.
         </div>
       </footer>
+
     </div>
   );
 }
 
-/* 🔹 Reusable Components */
 
-function FeatureCard({ title, desc }: { title: string; desc: string }) {
+/* 🔹 Feature Card */
+
+function FeatureCard({ icon, title, desc }: any) {
   return (
-    <div className="bg-gray-100 p-8 rounded-2xl shadow hover:shadow-xl transition">
-      <h3 className="text-xl font-semibold mb-4">{title}</h3>
-      <p className="text-gray-600">{desc}</p>
+    <div className="bg-white p-8 rounded-2xl shadow-md hover:shadow-2xl hover:-translate-y-2 transition text-center">
+
+      <div className="text-blue-600 mb-4 flex justify-center">
+        {icon}
+      </div>
+
+      <h3 className="text-xl font-semibold mb-3">
+        {title}
+      </h3>
+
+      <p className="text-gray-600">
+        {desc}
+      </p>
+
     </div>
   );
 }
 
-function TestCard({ title, questions }: { title: string; questions: string }) {
+
+/* 🔹 Test Card */
+
+function TestCard({ title, questions }: any) {
   return (
-    <div className="bg-gray-50 p-8 rounded-2xl shadow hover:shadow-xl transition">
-      <h3 className="text-lg font-bold mb-2">{title}</h3>
-      <p className="text-gray-600 mb-6">{questions}</p>
+    <div className="bg-gray-50 p-8 rounded-2xl shadow hover:shadow-xl transition border">
+
+      <h3 className="text-lg font-bold mb-2">
+        {title}
+      </h3>
+
+      <p className="text-gray-600 mb-6">
+        {questions}
+      </p>
+
       <Link
         href="/login"
         className="text-blue-600 font-semibold hover:underline"
       >
         Attempt Now →
       </Link>
+
     </div>
   );
 }
 
-function Step({ number, text }: { number: string; text: string }) {
+
+/* 🔹 Steps */
+
+function Step({ number, text }: any) {
   return (
     <div>
-      <div className="bg-blue-600 text-white w-14 h-14 mx-auto rounded-full flex items-center justify-center font-bold mb-4 text-lg">
+
+      <div className="bg-blue-600 text-white w-14 h-14 mx-auto rounded-full flex items-center justify-center font-bold mb-4 text-lg shadow-lg">
         {number}
       </div>
-      <p className="font-semibold">{text}</p>
+
+      <p className="font-semibold">
+        {text}
+      </p>
+
     </div>
   );
 }
