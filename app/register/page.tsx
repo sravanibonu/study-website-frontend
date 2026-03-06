@@ -4,6 +4,7 @@ import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { User, Mail, Lock, UserPlus } from "lucide-react";
 import API from "@/app/lib/api";
+import Navbar from "@/components/Navbar";
 
 interface RegisterForm {
   name: string;
@@ -61,6 +62,8 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
+
+  <Navbar></Navbar>
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 px-4">

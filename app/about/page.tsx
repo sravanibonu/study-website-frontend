@@ -1,11 +1,14 @@
 "use client";
 
+import Navbar from "@/components/Navbar";
 import { BookOpen, Target, Users, Trophy } from "lucide-react";
 import Link from "next/link";
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+
+      <Navbar></Navbar>
 
       {/* HERO */}
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-24 px-6 text-center">

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Mail, Lock, LogIn } from "lucide-react";
+import Navbar from "@/components/Navbar";
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>("");
@@ -10,6 +11,8 @@ export default function LoginPage() {
   const handleLogin = () => {
     console.log({ email, password });
   };
+
+  <Navbar></Navbar>
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600">

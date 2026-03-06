@@ -1,5 +1,6 @@
 "use client";
 
+import Navbar from "@/components/Navbar";
 import { useEffect, useState } from "react";
 
 interface Question {
@@ -45,6 +46,8 @@ export default function ResultPage() {
         <p className="text-lg">Loading Result...</p>
       </div>
     );
+
+  <Navbar></Navbar>
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">

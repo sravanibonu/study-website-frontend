@@ -503,45 +503,21 @@
 
 import Link from "next/link";
 import { BookOpen, BarChart3, Trophy } from "lucide-react";
+import Navbar from "@/components/Navbar";
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 text-gray-800">
 
-      {/* 🔷 NAVBAR */}
-      <nav className="flex justify-between items-center px-8 py-5 bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
-        <h1 className="text-2xl font-bold text-blue-600 tracking-wide">
-          StudyWeb
-        </h1>
 
-        <div className="space-x-8 hidden md:block font-medium">
-          <Link href="/" className="hover:text-blue-600 transition">Home</Link>
-          <Link href="/tests" className="hover:text-blue-600 transition">Tests</Link>
-          <Link href="/about" className="hover:text-blue-600 transition">About</Link>
-          <Link href="/contact" className="hover:text-blue-600 transition">Contact</Link>
-        </div>
 
-        <div className="space-x-3">
-          <Link
-            href="/login"
-            className="px-5 py-2 rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition"
-          >
-            Login
-          </Link>
 
-          <Link
-            href="/register"
-            className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-md transition"
-          >
-            Register
-          </Link>
-        </div>
-      </nav>
+      <Navbar></Navbar>
 
       {/* 🔵 HERO SECTION */}
       <section className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-32 px-6 text-center">
         <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-          Crack Competitive Exams <br /> With Smart Practice 🚀
+          Crack Competitive Exams <br /> With Smart Practice 
         </h1>
 
         <p className="text-lg max-w-2xl mx-auto mb-10 opacity-90">
