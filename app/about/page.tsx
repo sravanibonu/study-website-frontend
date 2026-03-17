@@ -1,14 +1,14 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import { BookOpen, Target, Users, Trophy } from "lucide-react";
+import { BookOpen, Target, Trophy } from "lucide-react";
 import Link from "next/link";
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-
-      <Navbar></Navbar>
+      
+      <Navbar />
 
       {/* HERO */}
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-24 px-6 text-center">
@@ -65,9 +65,7 @@ export default function AboutPage() {
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 text-center">
 
           <Stat number="50K+" label="Students Joined" />
-
           <Stat number="10K+" label="Practice Questions" />
-
           <Stat number="1K+" label="Tests Conducted" />
 
         </div>
