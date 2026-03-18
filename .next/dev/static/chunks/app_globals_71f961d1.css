@@ -46,6 +46,7 @@
     --color-red-50: #fef2f2;
     --color-red-100: #ffe2e2;
     --color-red-400: #ff6568;
+    --color-red-500: #fb2c36;
     --color-red-600: #e40014;
     --color-green-50: #f0fdf4;
     --color-green-400: #05df72;
@@ -113,6 +114,7 @@
       --color-red-50: lab(96.5005% 4.18511 1.52329);
       --color-red-100: lab(92.243% 10.2865 3.83865);
       --color-red-400: lab(63.7053% 60.7449 31.3109);
+      --color-red-500: lab(55.4814% 75.0732 48.8528);
       --color-red-600: lab(48.4493% 77.4328 61.5452);
       --color-green-50: lab(98.1563% -5.60117 2.75913);
       --color-green-400: lab(78.503% -64.9265 39.7492);
@@ -705,6 +707,10 @@
     background-color: var(--color-blue-100);
   }
 
+  .bg-blue-500 {
+    background-color: var(--color-blue-500);
+  }
+
   .bg-blue-600 {
     background-color: var(--color-blue-600);
   }
@@ -747,6 +753,10 @@
 
   .bg-red-100 {
     background-color: var(--color-red-100);
+  }
+
+  .bg-red-500 {
+    background-color: var(--color-red-500);
   }
 
   .bg-white {
@@ -812,6 +822,10 @@
   .to-purple-600 {
     --tw-gradient-to: var(--color-purple-600);
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+
+  .p-2 {
+    padding: calc(var(--spacing) * 2);
   }
 
   .p-3 {
@@ -1012,10 +1026,6 @@
 
   .text-indigo-600 {
     color: var(--color-indigo-600);
-  }
-
-  .text-purple-600 {
-    color: var(--color-purple-600);
   }
 
   .text-red-600 {
