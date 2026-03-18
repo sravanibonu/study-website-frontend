@@ -1,66 +1,41 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import API from "@/app/lib/api";
-
 export default function AdminDashboard() {
-  const router = useRouter();
-  const [tests, setTests] = useState<any[]>([]);
-
-  const fetchTests = async () => {
-    const res = await API.get("/tests");
-    setTests(res.data);
-  };
-
-  useEffect(() => {
-    fetchTests();
-  }, []);
-
-  const handleLogout = async () => {
-    await API.post("/user/logout");
-    router.push("/");
-  };
-
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="flex min-h-screen">
 
-      <div className="flex justify-between mb-6">
-        <h1 className="text-2xl font-bold">My Library</h1>
+      {/* LEFT SIDE MENU */}
+      <div className="w-1/4 bg-gray-100 p-4 space-y-4">
+        <h2 className="font-bold text-lg mb-4">Admin Panel</h2>
 
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 text-white px-4 py-2"
-        >
-          Logout
+        <div className="bg-white p-3 rounded shadow cursor-pointer">Create Questions</div>
+        <div className="bg-white p-3 rounded shadow cursor-pointer">Grading</div>
+        <div className="bg-white p-3 rounded shadow cursor-pointer">Test Sections</div>
+        <div className="bg-white p-3 rounded shadow cursor-pointer">Import Questions</div>
+        <div className="bg-white p-3 rounded shadow cursor-pointer">Test Settings</div>
+      </div>
+
+      {/* RIGHT SIDE CONTENT */}
+      <div className="w-3/4 p-6">
+        <h1 className="text-2xl font-bold mb-4">Create MCQ Question</h1>
+
+        <input
+          type="text"
+          placeholder="Enter Question"
+          className="w-full border p-2 mb-4 rounded"
+        />
+
+        <div className="space-y-2">
+          <input className="w-full border p-2 rounded" placeholder="Option 1" />
+          <input className="w-full border p-2 rounded" placeholder="Option 2" />
+          <input className="w-full border p-2 rounded" placeholder="Option 3" />
+          <input className="w-full border p-2 rounded" placeholder="Option 4" />
+        </div>
+
+        <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded">
+          Save Question
         </button>
       </div>
-
-      {/* FOLDERS */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
-        <div className="bg-white p-6 text-center">📁 Free Materials</div>
-        <div className="bg-white p-6 text-center">📁 Topic Tests</div>
-        <div className="bg-white p-6 text-center">📁 Sectional</div>
-        <div className="bg-white p-6 text-center">📁 Full Tests</div>
-      </div>
-
-      {/* TEST LIST */}
-      {tests.map((t: any) => (
-        <div
-          key={t._id}
-          className="bg-white p-4 mb-2 flex justify-between"
-        >
-          <p>{t.title}</p>
-
-          <button
-            onClick={() => router.push(`/admin-dashboard/${t._id}`)}
-            className="bg-blue-500 text-white px-3"
-          >
-            Open
-          </button>
-        </div>
-      ))}
-
     </div>
   );
 }

@@ -4,7 +4,6 @@ import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { User, Mail, Lock, UserPlus } from "lucide-react";
 import API from "@/app/lib/api";
-import Navbar from "@/components/Navbar";
 
 interface RegisterForm {
   name: string;
@@ -64,92 +63,83 @@ export default function RegisterPage() {
   };
 
   return (
-    <>
-      <Navbar />
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 px-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-10 shadow-2xl rounded-2xl w-full max-w-md"
+      >
+        <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
+          Create Account
+        </h2>
 
-      <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 px-4">
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white p-10 shadow-2xl rounded-2xl w-full max-w-md"
+        {error && (
+          <div className="bg-red-100 text-red-600 p-3 mb-4 rounded text-sm">
+            {error}
+          </div>
+        )}
+
+        <div className="flex items-center border rounded-lg mb-4 px-3">
+          <User className="text-gray-400 mr-2" size={20} />
+          <input
+            type="text"
+            placeholder="Full Name"
+            required
+            className="w-full p-3 outline-none"
+            value={form.name}
+            onChange={(e) =>
+              setForm({ ...form, name: e.target.value })
+            }
+          />
+        </div>
+
+        <div className="flex items-center border rounded-lg mb-4 px-3">
+          <Mail className="text-gray-400 mr-2" size={20} />
+          <input
+            type="email"
+            placeholder="Email"
+            required
+            className="w-full p-3 outline-none"
+            value={form.email}
+            onChange={(e) =>
+              setForm({ ...form, email: e.target.value })
+            }
+          />
+        </div>
+
+        <div className="flex items-center border rounded-lg mb-6 px-3">
+          <Lock className="text-gray-400 mr-2" size={20} />
+          <input
+            type="password"
+            placeholder="Password"
+            required
+            minLength={6}
+            className="w-full p-3 outline-none"
+            value={form.password}
+            onChange={(e) =>
+              setForm({ ...form, password: e.target.value })
+            }
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg transition disabled:opacity-50"
         >
-          <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
-            Create Account
-          </h2>
+          <UserPlus size={18} />
+          {loading ? "Creating Account..." : "Register"}
+        </button>
 
-          {error && (
-            <div className="bg-red-100 text-red-600 p-3 mb-4 rounded text-sm">
-              {error}
-            </div>
-          )}
-
-          {/* Name */}
-          <div className="flex items-center border rounded-lg mb-4 px-3">
-            <User className="text-gray-400 mr-2" size={20} />
-            <input
-              type="text"
-              placeholder="Full Name"
-              required
-              className="w-full p-3 outline-none"
-              value={form.name}
-              onChange={(e) =>
-                setForm({ ...form, name: e.target.value })
-              }
-            />
-          </div>
-
-          {/* Email */}
-          <div className="flex items-center border rounded-lg mb-4 px-3">
-            <Mail className="text-gray-400 mr-2" size={20} />
-            <input
-              type="email"
-              placeholder="Email"
-              required
-              className="w-full p-3 outline-none"
-              value={form.email}
-              onChange={(e) =>
-                setForm({ ...form, email: e.target.value })
-              }
-            />
-          </div>
-
-          {/* Password */}
-          <div className="flex items-center border rounded-lg mb-6 px-3">
-            <Lock className="text-gray-400 mr-2" size={20} />
-            <input
-              type="password"
-              placeholder="Password"
-              required
-              minLength={6}
-              className="w-full p-3 outline-none"
-              value={form.password}
-              onChange={(e) =>
-                setForm({ ...form, password: e.target.value })
-              }
-            />
-          </div>
-
-          {/* Register Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg transition disabled:opacity-50"
+        <p className="text-center text-sm text-gray-500 mt-6">
+          Already have an account?{" "}
+          <span
+            className="text-blue-600 cursor-pointer hover:underline"
+            onClick={() => router.push("/login")}
           >
-            <UserPlus size={18} />
-            {loading ? "Creating Account..." : "Register"}
-          </button>
-
-          {/* Login Link */}
-          <p className="text-center text-sm text-gray-500 mt-6">
-            Already have an account?{" "}
-            <span
-              className="text-blue-600 cursor-pointer hover:underline"
-              onClick={() => router.push("/login")}
-            >
-              Login
-            </span>
-          </p>
-        </form>
-      </div>
-    </>
+            Login
+          </span>
+        </p>
+      </form>
+    </div>
   );
 }

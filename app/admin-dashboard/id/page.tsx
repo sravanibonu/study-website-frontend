@@ -18,7 +18,7 @@ export default function Page() {
       answer,
     });
 
-    alert("Added ✅");
+    alert("Question added ✅");
   };
 
   return (
@@ -26,8 +26,8 @@ export default function Page() {
 
       <input
         placeholder="Question"
-        onChange={(e) => setQuestion(e.target.value)}
         className="border p-2 w-full mb-2"
+        onChange={(e) => setQuestion(e.target.value)}
       />
 
       {options.map((_, i) => (
@@ -45,8 +45,8 @@ export default function Page() {
 
       <input
         placeholder="Answer"
-        onChange={(e) => setAnswer(e.target.value)}
         className="border p-2 w-full mb-2"
+        onChange={(e) => setAnswer(e.target.value)}
       />
 
       <button
