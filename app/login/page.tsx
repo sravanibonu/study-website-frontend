@@ -1,83 +1,66 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Lock, LogIn } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import API from "@/app/lib/api";
-import Navbar from "@/components/Navbar";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const isAdmin = searchParams.get("role") === "admin";
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
-      const { data } = await API.post("/user/login", {
+      const res = await API.post("/user/login", {
         email,
         password,
       });
 
-      if (data?.token) {
-        localStorage.setItem("token", data.token);
-
-        // Role based redirect
-        if (data.role === "admin") {
-          router.push("/dashboard");
-        } else {
-          router.push("/home");
-        }
+      if (res.data.role === "admin" || isAdmin) {
+        router.push("/admin-dashboard");
+      } else {
+        router.push("/user-dashboard");
       }
-    } catch (err: any) {
-      console.error(err);
+
+    } catch {
+      alert("Login failed ❌");
     }
   };
 
   return (
-    <>
-      <Navbar />
+    <div className="flex justify-center items-center h-screen">
 
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600">
-        <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md">
-          <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
-            Login
-          </h2>
+      <div className="bg-white p-6 shadow rounded w-80">
 
-          {/* Email */}
-          <div className="flex items-center border rounded-lg mb-4 px-3">
-            <Mail className="text-gray-400 mr-2" size={20} />
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-full p-3 outline-none"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+        <h2 className="text-xl mb-4 text-center">
+          {isAdmin ? "Admin Login" : "User Login"}
+        </h2>
 
-          {/* Password */}
-          <div className="flex items-center border rounded-lg mb-6 px-3">
-            <Lock className="text-gray-400 mr-2" size={20} />
-            <input
-              type="password"
-              placeholder="Password"
-              className="w-full p-3 outline-none"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+        <input
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+          className="border p-2 w-full mb-2"
+        />
 
-          {/* Login Button */}
-          <button
-            onClick={handleLogin}
-            className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
-          >
-            <LogIn size={18} />
-            Login
-          </button>
-        </div>
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+          className="border p-2 w-full mb-3"
+        />
+
+        <button
+          onClick={handleLogin}
+          className="bg-blue-600 text-white w-full p-2"
+        >
+          Login
+        </button>
+
       </div>
-    </>
+    </div>
   );
 }

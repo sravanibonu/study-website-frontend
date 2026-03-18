@@ -45,19 +45,28 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   type __Unused = __Check
 }
 
-// Validate ../../../app/contact/page.tsx
+// Validate ../../../app/admin-dashboard/id/page.tsx
 {
-  type __IsExpected<Specific extends AppPageConfig<"/contact">> = Specific
-  const handler = {} as typeof import("../../../app/contact/page.js")
+  type __IsExpected<Specific extends AppPageConfig<"/admin-dashboard/id">> = Specific
+  const handler = {} as typeof import("../../../app/admin-dashboard/id/page.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
 }
 
-// Validate ../../../app/dashboard/page.tsx
+// Validate ../../../app/admin-dashboard/page.tsx
 {
-  type __IsExpected<Specific extends AppPageConfig<"/dashboard">> = Specific
-  const handler = {} as typeof import("../../../app/dashboard/page.js")
+  type __IsExpected<Specific extends AppPageConfig<"/admin-dashboard">> = Specific
+  const handler = {} as typeof import("../../../app/admin-dashboard/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/contact/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/contact">> = Specific
+  const handler = {} as typeof import("../../../app/contact/page.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
@@ -112,6 +121,15 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
 {
   type __IsExpected<Specific extends AppPageConfig<"/tests">> = Specific
   const handler = {} as typeof import("../../../app/tests/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/user-dashboard/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/user-dashboard">> = Specific
+  const handler = {} as typeof import("../../../app/user-dashboard/page.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
