@@ -1,6 +1,4 @@
 "use client";
-
-import Navbar from "@/components/Navbar";
 import { useEffect, useState } from "react";
 
 interface Question {
@@ -46,9 +44,6 @@ export default function ResultPage() {
   }
 
   return (
-    <>
-      <Navbar />
-
       <div className="min-h-screen bg-gray-100 p-8">
         <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg">
           <h2 className="text-3xl font-bold mb-6 text-center">
@@ -117,6 +112,5 @@ export default function ResultPage() {
           })}
         </div>
       </div>
-    </>
   );
 }

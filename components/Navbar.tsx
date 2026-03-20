@@ -1,45 +1,157 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { fetchAPI } from "@/utils/api";
+import Link from "next/link";
+import Image from "next/image";
+import { Menu, X } from "lucide-react";
+import { JSX } from "react/jsx-dev-runtime";
 
-export default function Navbar() {
+export default function Navbar(): JSX.Element {
+  const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
 
-  const scrollToSection = (id: string) => {
-    if (window.location.pathname !== "/") {
-      router.push("/");
-      setTimeout(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-      }, 300);
-    } else {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    }
+  const handleLogout = async () => {
+    await fetchAPI("/user/logout", {
+      method: "POST",
+    });
+
+    router.push("/login");
   };
 
   return (
-    <nav className="flex justify-between items-center px-6 py-4 shadow sticky top-0 bg-white z-50">
-      <h1 onClick={() => scrollToSection("home")} className="cursor-pointer font-bold text-blue-600">
-        Quizaro
-      </h1>
+    <nav className="sticky top-0 z-50 w-full bg-white border-b shadow-sm">
 
-      <div className="flex gap-6 items-center">
-        <span onClick={() => scrollToSection("home")}>Home</span>
-        <span onClick={() => scrollToSection("tests")}>Tests</span>
-        <span onClick={() => scrollToSection("about")}>About</span>
-        <span onClick={() => scrollToSection("contact")}>Contact</span>
+      <div className="max-w-7xl mx-auto px-8 h-24 flex items-center justify-between">
 
-        <button onClick={() => router.push("/admin-dashboard")} className="bg-blue-500 text-white px-4 py-2 rounded">
-          Admin
+        {/* Logo */}
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/logo.png"
+            alt="Quizaro Logo"
+            width={200}
+            height={80}
+            priority
+            className="h-16 w-auto"
+          />
+        </Link>
+
+        {/* Center Navigation */}
+        <div className="hidden md:flex items-center gap-10 text-gray-700 font-medium text-lg">
+
+          <Link href="/" className="hover:text-blue-600 transition">
+            Home
+          </Link>
+
+          <Link href="/tests" className="hover:text-blue-600 transition">
+            Tests
+          </Link>
+
+          <Link href="/about" className="hover:text-blue-600 transition">
+            About
+          </Link>
+
+          <Link href="/contact" className="hover:text-blue-600 transition">
+            Contact
+          </Link>
+
+        </div>
+
+        {/* Right Buttons */}
+        <div className="hidden md:flex items-center gap-4">
+
+          <Link
+            href="/login"
+            className="px-6 py-2 rounded-lg border border-blue-500 text-blue-600 hover:bg-blue-600 hover:text-white transition"
+          >
+            Login
+          </Link>
+
+          <Link
+            href="/register"
+            className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-md transition"
+          >
+            Register
+          </Link>
+
+          {/* Admin */}
+          <Link
+            href="/admin"
+            className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-md transition"
+          >
+            Admin
+          </Link>
+
+          {/* ✅ Logout */}
+          <button
+            onClick={handleLogout}
+            className="px-6 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition"
+          >
+            Logout
+          </button>
+
+        </div>
+
+        {/* Mobile Button */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="md:hidden text-gray-700"
+        >
+          {open ? <X size={28} /> : <Menu size={28} />}
         </button>
 
-        <button onClick={() => router.push("/login")} className="border px-4 py-2 rounded">
-          Login
-        </button>
-
-        <button onClick={() => router.push("/register")} className="bg-blue-500 text-white px-4 py-2 rounded">
-          Register
-        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {open && (
+        <div className="md:hidden bg-white border-t px-8 pb-6">
+
+          <div className="flex flex-col gap-4 pt-4 text-gray-700 font-medium">
+
+            <Link href="/">Home</Link>
+            <Link href="/tests">Tests</Link>
+            <Link href="/about">About</Link>
+            <Link href="/contact">Contact</Link>
+
+          </div>
+
+          <div className="flex flex-col gap-3 pt-5">
+
+            <Link
+              href="/login"
+              className="w-full text-center px-4 py-2 border border-blue-500 text-blue-600 rounded-lg"
+            >
+              Login
+            </Link>
+
+            <Link
+              href="/register"
+              className="w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg"
+            >
+              Register
+            </Link>
+
+            {/* Admin */}
+            <Link
+              href="/admin"
+              className="w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg"
+            >
+              Admin
+            </Link>
+
+            {/* ✅ Logout */}
+            <button
+              onClick={handleLogout}
+              className="w-full text-center px-4 py-2 bg-red-500 text-white rounded-lg"
+            >
+              Logout
+            </button>
+
+          </div>
+
+        </div>
+      )}
     </nav>
   );
 }
