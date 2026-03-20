@@ -41,8 +41,8 @@ export default function RegisterPage() {
 
     try {
       const { data } = await API.post<RegisterResponse>(
-        "/user/register",
-        form
+  "/api/user/register", // ✅ FIXED
+  form
       );
 
       if (data?.token) {
