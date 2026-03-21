@@ -3,16 +3,12 @@
 import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { User, Mail, Lock, UserPlus } from "lucide-react";
-import API from "@/utils/api"; // ✅ FIXED IMPORT PATH
+import API from "@/utils/api";
 
 interface RegisterForm {
   name: string;
   email: string;
   password: string;
-}
-
-interface RegisterResponse {
-  token: string;
 }
 
 export default function RegisterPage() {
@@ -40,17 +36,15 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      const { data } = await API.post<RegisterResponse>(
-        "/user/register", // ✅ FIXED (removed /api)
+      // ✅ KEEP THIS (already correct)
+      const { data } = await API.post(
+        "/user/register",
         form
       );
 
-      if (data?.token) {
-        localStorage.setItem("token", data.token);
-        router.push("/dashboard");
-      } else {
-        setError("Invalid server response");
-      }
+      // ⚠️ FIX: backend uses cookies, not token
+      router.push("/login");
+
     } catch (err: any) {
       setError(
         err?.response?.data?.message ||

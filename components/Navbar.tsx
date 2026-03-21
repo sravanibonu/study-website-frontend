@@ -2,156 +2,88 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { fetchAPI } from "@/utils/api";
-import Link from "next/link";
-import Image from "next/image";
-import { Menu, X } from "lucide-react";
-import { JSX } from "react/jsx-dev-runtime";
+import API from "@/utils/api";
 
-export default function Navbar(): JSX.Element {
-  const [open, setOpen] = useState<boolean>(false);
+export default function Register() {
   const router = useRouter();
 
-  const handleLogout = async () => {
-    await fetchAPI("/user/logout", {
-      method: "POST",
-    });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-    router.push("/login");
+  const handleChange = (e: any) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      // ✅ FIXED HERE (removed /api)
+      const res = await API.post("/user/register", formData);
+
+      console.log(res.data);
+      alert("Registration successful");
+
+      router.push("/login");
+    } catch (error: any) {
+      console.error(error);
+      alert("Registration failed");
+    }
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white border-b shadow-sm">
+    <div className="flex justify-center items-center min-h-screen">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded shadow-md w-96"
+      >
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          Register
+        </h2>
 
-      <div className="max-w-7xl mx-auto px-8 h-24 flex items-center justify-between">
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          value={formData.name}
+          onChange={handleChange}
+          className="w-full mb-4 p-2 border rounded"
+          required
+        />
 
-        {/* Logo */}
-        <Link href="/" className="flex items-center">
-          <Image
-            src="/logo.png"
-            alt="Quizaro Logo"
-            width={200}
-            height={80}
-            priority
-            className="h-16 w-auto"
-          />
-        </Link>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          className="w-full mb-4 p-2 border rounded"
+          required
+        />
 
-        {/* Center Navigation */}
-        <div className="hidden md:flex items-center gap-10 text-gray-700 font-medium text-lg">
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          className="w-full mb-4 p-2 border rounded"
+          required
+        />
 
-          <Link href="/" className="hover:text-blue-600 transition">
-            Home
-          </Link>
-
-          <Link href="/tests" className="hover:text-blue-600 transition">
-            Tests
-          </Link>
-
-          <Link href="/about" className="hover:text-blue-600 transition">
-            About
-          </Link>
-
-          <Link href="/contact" className="hover:text-blue-600 transition">
-            Contact
-          </Link>
-
-        </div>
-
-        {/* Right Buttons */}
-        <div className="hidden md:flex items-center gap-4">
-
-          <Link
-            href="/login"
-            className="px-6 py-2 rounded-lg border border-blue-500 text-blue-600 hover:bg-blue-600 hover:text-white transition"
-          >
-            Login
-          </Link>
-
-          <Link
-            href="/register"
-            className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-md transition"
-          >
-            Register
-          </Link>
-
-          {/* Admin */}
-          <Link
-            href="/admin"
-            className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-md transition"
-          >
-            Admin
-          </Link>
-
-          {/* ✅ Logout */}
-          <button
-            onClick={handleLogout}
-            className="px-6 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition"
-          >
-            Logout
-          </button>
-
-        </div>
-
-        {/* Mobile Button */}
         <button
-          onClick={() => setOpen(!open)}
-          className="md:hidden text-gray-700"
+          type="submit"
+          className="w-full bg-blue-600 text-white p-2 rounded"
         >
-          {open ? <X size={28} /> : <Menu size={28} />}
+          Register
         </button>
-
-      </div>
-
-      {/* Mobile Menu */}
-      {open && (
-        <div className="md:hidden bg-white border-t px-8 pb-6">
-
-          <div className="flex flex-col gap-4 pt-4 text-gray-700 font-medium">
-
-            <Link href="/">Home</Link>
-            <Link href="/tests">Tests</Link>
-            <Link href="/about">About</Link>
-            <Link href="/contact">Contact</Link>
-
-          </div>
-
-          <div className="flex flex-col gap-3 pt-5">
-
-            <Link
-              href="/login"
-              className="w-full text-center px-4 py-2 border border-blue-500 text-blue-600 rounded-lg"
-            >
-              Login
-            </Link>
-
-            <Link
-              href="/register"
-              className="w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg"
-            >
-              Register
-            </Link>
-
-            {/* Admin */}
-            <Link
-              href="/admin"
-              className="w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg"
-            >
-              Admin
-            </Link>
-
-            {/* ✅ Logout */}
-            <button
-              onClick={handleLogout}
-              className="w-full text-center px-4 py-2 bg-red-500 text-white rounded-lg"
-            >
-              Logout
-            </button>
-
-          </div>
-
-        </div>
-      )}
-    </nav>
+      </form>
+    </div>
   );
 }
