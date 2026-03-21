@@ -3,7 +3,7 @@
 import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { User, Mail, Lock, UserPlus } from "lucide-react";
-import API from "@/app/lib/api";
+import API from "@/utils/api"; // ✅ FIXED IMPORT PATH
 
 interface RegisterForm {
   name: string;
@@ -41,8 +41,8 @@ export default function RegisterPage() {
 
     try {
       const { data } = await API.post<RegisterResponse>(
-  "/api/user/register", // ✅ FIXED
-  form
+        "/user/register", // ✅ FIXED (removed /api)
+        form
       );
 
       if (data?.token) {
