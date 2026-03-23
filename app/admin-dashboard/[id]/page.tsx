@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import API from "@/app/lib/api";
+import API from "@/utils/api";
 
 export default function Page() {
   const { id } = useParams();

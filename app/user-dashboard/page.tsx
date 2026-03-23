@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import API from "@/app/lib/api";
+import API from "@/utils/api";
 
 export default function UserDashboard() {
   const router = useRouter();
