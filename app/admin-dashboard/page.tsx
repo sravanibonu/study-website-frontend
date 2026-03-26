@@ -11,22 +11,27 @@ export default function AdminDashboard() {
   const [tests, setTests] = useState<any[]>([]);
   const [editId, setEditId] = useState<string | null>(null);
 
-  // ✅ PROTECT ADMIN (FIXED)
+  // ✅ PROTECT ADMIN (FIXED ROLE CHECK)
   useEffect(() => {
     const check = async () => {
       try {
         const { data } = await API.get("/user/profile");
 
-        if (data.user?.role !== "admin") {
-          router.replace("/login"); // ✅ FIXED
+        console.log("PROFILE:", data);
+
+        // ✅ FIX HERE
+        const role = data?.role || data?.user?.role;
+
+        if (role !== "admin") {
+          router.replace("/login");
         }
       } catch {
-        router.replace("/login"); // ✅ FIXED
+        router.replace("/login");
       }
     };
 
     check();
-  }, []); // ✅ FIXED (removed router dependency)
+  }, []);
 
   // ✅ LOAD TESTS
   const loadTests = async () => {
@@ -81,12 +86,12 @@ export default function AdminDashboard() {
     setEditId(test._id);
   };
 
-  // 🚪 LOGOUT (FIXED)
+  // 🚪 LOGOUT
   const handleLogout = async () => {
     try {
       await API.post("/user/logout");
     } catch {}
-    router.replace("/login"); // ✅ FIXED
+    router.replace("/login");
   };
 
   return (
