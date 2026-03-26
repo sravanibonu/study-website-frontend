@@ -10,19 +10,22 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  // ✅ Auto login check (if already logged in)
+  // ✅ Auto login check
   useEffect(() => {
     const checkUser = async () => {
       try {
         const { data } = await API.get("/user/profile");
 
-        if (data.role === "admin") {
+        // 🔥 FIX HERE (safe handling)
+        const role = data?.user?.role || data?.role;
+
+        if (role === "admin") {
           router.push("/admin-dashboard");
-        } else {
+        } else if (role === "user") {
           router.push("/user-dashboard");
         }
       } catch {
-        // Not logged in → stay on login page
+        // not logged in → stay
       }
     };
 
@@ -38,17 +41,17 @@ export default function LoginPage() {
 
       const data = res.data;
 
-      // ✅ Role-based redirect
-      if (data.role === "admin") {
+      // 🔥 FIX HERE (IMPORTANT)
+      const role = data?.user?.role || data?.role;
+
+      if (role === "admin") {
         router.push("/admin-dashboard");
       } else {
         router.push("/user-dashboard");
       }
 
     } catch (err: any) {
-      alert(
-        err?.response?.data?.message || "Login failed"
-      );
+      alert(err?.response?.data?.message || "Login failed");
     }
   };
 
