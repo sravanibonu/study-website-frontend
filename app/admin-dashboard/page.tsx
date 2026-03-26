@@ -11,26 +11,31 @@ export default function AdminDashboard() {
   const [tests, setTests] = useState<any[]>([]);
   const [editId, setEditId] = useState<string | null>(null);
 
-  // ✅ PROTECT ADMIN
+  // ✅ PROTECT ADMIN (FIXED)
   useEffect(() => {
     const check = async () => {
       try {
         const { data } = await API.get("/user/profile");
-        console.log(data);
+
         if (data.user?.role !== "admin") {
-          router.push("/login");
+          router.replace("/login"); // ✅ FIXED
         }
       } catch {
-        router.push("/login");
+        router.replace("/login"); // ✅ FIXED
       }
     };
+
     check();
-  }, [router]);
+  }, []); // ✅ FIXED (removed router dependency)
 
   // ✅ LOAD TESTS
   const loadTests = async () => {
-    const { data } = await API.get("/tests");
-    setTests(data);
+    try {
+      const { data } = await API.get("/tests");
+      setTests(data);
+    } catch (err) {
+      console.error("Error loading tests", err);
+    }
   };
 
   useEffect(() => {
@@ -62,8 +67,12 @@ export default function AdminDashboard() {
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this test?")) return;
 
-    await API.delete(`/test/${id}`);
-    loadTests();
+    try {
+      await API.delete(`/test/${id}`);
+      loadTests();
+    } catch {
+      alert("Error deleting test");
+    }
   };
 
   // ✏️ EDIT CLICK
@@ -72,10 +81,12 @@ export default function AdminDashboard() {
     setEditId(test._id);
   };
 
-  // 🚪 LOGOUT
+  // 🚪 LOGOUT (FIXED)
   const handleLogout = async () => {
-    await API.post("/user/logout");
-    router.push("/login");
+    try {
+      await API.post("/user/logout");
+    } catch {}
+    router.replace("/login"); // ✅ FIXED
   };
 
   return (
