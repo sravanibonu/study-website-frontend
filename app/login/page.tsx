@@ -15,9 +15,9 @@ export default function LoginPage() {
     const role = localStorage.getItem("role");
 
     if (role === "admin") {
-      router.replace("/admin/dashboard");
+      router.push("/admin/dashboard");
     } else if (role === "student") {
-      router.replace("/dashboard");
+      router.push("/user-dashboard");
     }
   }, []);
 
