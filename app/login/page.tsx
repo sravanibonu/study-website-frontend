@@ -10,28 +10,16 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  // ✅ Auto login check
+  // ✅ Auto login check (NO API → NO BLINKING)
   useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const { data } = await API.get("/user/profile");
+    const role = localStorage.getItem("role");
 
-        console.log("Profile:", data);
-
-        const role = data?.role || data?.user?.role;
-
-        if (role === "admin") {
-          router.push("/admin/dashboard");   // ✅ FIXED PATH
-        } else if (role === "user") {
-          router.push("/dashboard");         // ✅ FIXED PATH
-        }
-      } catch {
-        // not logged in
-      }
-    };
-
-    checkUser();
-  }, [router]);
+    if (role === "admin") {
+      router.replace("/admin/dashboard");
+    } else if (role === "user") {
+      router.replace("/dashboard");
+    }
+  }, []);
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
@@ -43,26 +31,25 @@ export default function LoginPage() {
       });
 
       const data = res.data;
-
       console.log("Login:", data);
 
-      // ✅ IMPORTANT ADD (MISSING BEFORE)
+      // ✅ Save token
       if (data.token) {
         localStorage.setItem("token", data.token);
       }
 
+      // ✅ Get correct role
       const role = data?.role || data?.user?.role;
 
-      // ✅ STORE ROLE
       if (role) {
         localStorage.setItem("role", role);
       }
 
-      // ✅ FIXED ROUTING
+      // ✅ SAFE REDIRECT (NO LOOP)
       if (role === "admin") {
-        router.push("/admin/dashboard");
+        router.replace("/admin/dashboard");
       } else if (role === "user") {
-        router.push("/dashboard");
+        router.replace("/dashboard");
       } else {
         alert("Role not found");
       }
