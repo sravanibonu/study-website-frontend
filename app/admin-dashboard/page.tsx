@@ -16,7 +16,8 @@ export default function AdminDashboard() {
     const check = async () => {
       try {
         const { data } = await API.get("/user/profile");
-        if (data.role !== "admin") {
+        console.log(data);
+        if (data.user?.role !== "admin") {
           router.push("/login");
         }
       } catch {
