@@ -1,89 +1,39 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import API from "@/utils/api";
+import Link from "next/link";
 
-export default function Register() {
-  const router = useRouter();
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e: any) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-
-    try {
-      // ✅ FIXED HERE (removed /api)
-      const res = await API.post("/user/register", formData);
-
-      console.log(res.data);
-      alert("Registration successful");
-
-      router.push("/login");
-    } catch (error: any) {
-      console.error(error);
-      alert("Registration failed");
-    }
-  };
-
+export default function Navbar() {
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded shadow-md w-96"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center">
-          Register
-        </h2>
+    <nav className="flex justify-between items-center px-8 py-4 bg-white shadow-md">
 
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-          className="w-full mb-4 p-2 border rounded"
-          required
-        />
+      {/* LOGO */}
+      <h1 className="text-2xl font-bold text-blue-600">
+        StudyWeb
+      </h1>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          className="w-full mb-4 p-2 border rounded"
-          required
-        />
+      {/* LINKS */}
+      <div className="space-x-6 hidden md:flex">
+        <Link href="/">Home</Link>
+        <Link href="/tests">Tests</Link>
+        <Link href="/about">About</Link>
+        <Link href="/contact">Contact</Link>
+      </div>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          className="w-full mb-4 p-2 border rounded"
-          required
-        />
+      {/* AUTH */}
+      <div className="space-x-4">
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded"
+        {/* 🔥 ADMIN BUTTON ADDED */}
+        <Link
+          href="/admin-dashboard"
+          className="px-3 py-1 bg-black text-white rounded"
         >
-          Register
-        </button>
-      </form>
-    </div>
+          Admin
+        </Link>
+
+        <Link href="/login">Login</Link>
+        <Link href="/register">Register</Link>
+      </div>
+
+    </nav>
   );
 }

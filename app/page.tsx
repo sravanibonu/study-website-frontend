@@ -503,7 +503,7 @@
 
 import Link from "next/link";
 import { BookOpen, BarChart3, Trophy } from "lucide-react";
-export default function HomePage() {
+export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 text-gray-800">
 

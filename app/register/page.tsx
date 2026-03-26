@@ -3,7 +3,7 @@
 import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { User, Mail, Lock, UserPlus } from "lucide-react";
-import API from "@/utils/api";
+import API from "@/app/lib/api"; // ✅ updated import
 
 interface RegisterForm {
   name: string;
@@ -23,11 +23,20 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // ✅ FIXED: Check user via cookies (not localStorage)
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      router.push("/dashboard");
-    }
+    const checkUser = async () => {
+      try {
+        const { data } = await API.get("/user/profile");
+        if (data) {
+          router.push("/user-dashboard");
+        }
+      } catch {
+        // not logged in → do nothing
+      }
+    };
+
+    checkUser();
   }, [router]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -36,13 +45,10 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      // ✅ KEEP THIS (already correct)
-      const { data } = await API.post(
-        "/user/register",
-        form
-      );
+      // ✅ Register API
+      await API.post("/user/register", form);
 
-      // ⚠️ FIX: backend uses cookies, not token
+      // ✅ After register → go to login
       router.push("/login");
 
     } catch (err: any) {
@@ -72,6 +78,7 @@ export default function RegisterPage() {
           </div>
         )}
 
+        {/* Name */}
         <div className="flex items-center border rounded-lg mb-4 px-3">
           <User className="text-gray-400 mr-2" size={20} />
           <input
@@ -86,6 +93,7 @@ export default function RegisterPage() {
           />
         </div>
 
+        {/* Email */}
         <div className="flex items-center border rounded-lg mb-4 px-3">
           <Mail className="text-gray-400 mr-2" size={20} />
           <input
@@ -100,6 +108,7 @@ export default function RegisterPage() {
           />
         </div>
 
+        {/* Password */}
         <div className="flex items-center border rounded-lg mb-6 px-3">
           <Lock className="text-gray-400 mr-2" size={20} />
           <input
@@ -115,6 +124,7 @@ export default function RegisterPage() {
           />
         </div>
 
+        {/* Button */}
         <button
           type="submit"
           disabled={loading}

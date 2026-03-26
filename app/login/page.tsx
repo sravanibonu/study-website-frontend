@@ -1,7 +1,7 @@
 "use client";
 
-import API from "@/utils/api"; // ✅ FIXED (was fetchAPI)
-import { useState } from "react";
+import API from "@/app/lib/api";
+import { useState, useEffect } from "react";
 import { Mail, Lock, LogIn } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -10,9 +10,27 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const handleLogin = async () => { // ✅ FIXED (removed duplicate function)
+  // ✅ Auto login check (if already logged in)
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const { data } = await API.get("/user/profile");
+
+        if (data.role === "admin") {
+          router.push("/admin-dashboard");
+        } else {
+          router.push("/user-dashboard");
+        }
+      } catch {
+        // Not logged in → stay on login page
+      }
+    };
+
+    checkUser();
+  }, [router]);
+
+  const handleLogin = async () => {
     try {
-      // ✅ FIXED (use API instead of fetchAPI)
       const res = await API.post("/user/login", {
         email,
         password,
@@ -20,14 +38,17 @@ export default function LoginPage() {
 
       const data = res.data;
 
+      // ✅ Role-based redirect
       if (data.role === "admin") {
         router.push("/admin-dashboard");
       } else {
-        router.push("/home");
+        router.push("/user-dashboard");
       }
 
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      alert(
+        err?.response?.data?.message || "Login failed"
+      );
     }
   };
 
