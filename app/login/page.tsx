@@ -16,14 +16,14 @@ export default function LoginPage() {
       try {
         const { data } = await API.get("/user/profile");
 
-        console.log("Profile:", data); // 🔥 debug
+        console.log("Profile:", data);
 
         const role = data?.role || data?.user?.role;
 
         if (role === "admin") {
-          router.push("/admin-dashboard");
+          router.push("/admin/dashboard");   // ✅ FIXED PATH
         } else if (role === "user") {
-          router.push("/user-dashboard");
+          router.push("/dashboard");         // ✅ FIXED PATH
         }
       } catch {
         // not logged in
@@ -34,7 +34,7 @@ export default function LoginPage() {
   }, [router]);
 
   const handleLogin = async (e: any) => {
-    e.preventDefault(); // 🔥 IMPORTANT
+    e.preventDefault();
 
     try {
       const res = await API.post("/user/login", {
@@ -44,15 +44,25 @@ export default function LoginPage() {
 
       const data = res.data;
 
-      console.log("Login:", data); // 🔥 debug
+      console.log("Login:", data);
+
+      // ✅ IMPORTANT ADD (MISSING BEFORE)
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
 
       const role = data?.role || data?.user?.role;
 
-      // ✅ FIX: correct role check
+      // ✅ STORE ROLE
+      if (role) {
+        localStorage.setItem("role", role);
+      }
+
+      // ✅ FIXED ROUTING
       if (role === "admin") {
-        router.push("/admin-dashboard");
+        router.push("/admin/dashboard");
       } else if (role === "user") {
-        router.push("/user-dashboard");
+        router.push("/dashboard");
       } else {
         alert("Role not found");
       }
@@ -65,14 +75,13 @@ export default function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600">
       <form
-        onSubmit={handleLogin}  // 🔥 form submit
+        onSubmit={handleLogin}
         className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md"
       >
         <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
           Login
         </h2>
 
-        {/* Email */}
         <div className="flex items-center border rounded-lg mb-4 px-3">
           <Mail className="text-gray-400 mr-2" size={20} />
           <input
@@ -85,7 +94,6 @@ export default function LoginPage() {
           />
         </div>
 
-        {/* Password */}
         <div className="flex items-center border rounded-lg mb-6 px-3">
           <Lock className="text-gray-400 mr-2" size={20} />
           <input
@@ -98,7 +106,6 @@ export default function LoginPage() {
           />
         </div>
 
-        {/* Button */}
         <button
           type="submit"
           className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
