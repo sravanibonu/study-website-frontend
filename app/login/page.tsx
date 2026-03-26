@@ -10,13 +10,13 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  // ✅ Auto login check (NO API → NO BLINKING)
+  // ✅ Auto login check
   useEffect(() => {
     const role = localStorage.getItem("role");
 
     if (role === "admin") {
       router.replace("/admin/dashboard");
-    } else if (role === "user") {
+    } else if (role === "student") {
       router.replace("/dashboard");
     }
   }, []);
@@ -25,35 +25,40 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
-      const res = await API.post("/user/login", {
-        email,
-        password,
-      });
+      const res = await API.post(
+        "/user/login",
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true, // ✅ IMPORTANT for cookies
+        }
+      );
 
       const data = res.data;
-      console.log("Login:", data);
+      console.log("Login Response:", data);
 
-      // ✅ Save token
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-      }
-
-      // ✅ Get correct role
+      // ✅ Get role properly
       const role = data?.role || data?.user?.role;
 
-      if (role) {
-        localStorage.setItem("role", role);
+      if (!role) {
+        alert("Role not found");
+        return; // ✅ stops blinking loop
       }
 
-      // ✅ SAFE REDIRECT (NO LOOP)
+      // ✅ Save role
+      localStorage.setItem("role", role);
+
+      // ✅ Redirect based on role
       if (role === "admin") {
         router.replace("/admin/dashboard");
-      } else if (role === "user") {
+      } else if (role === "student") {
         router.replace("/dashboard");
       } else {
-        alert("Role not found");
+        alert("Invalid role");
+        return;
       }
-
     } catch (err: any) {
       alert(err?.response?.data?.message || "Login failed");
     }
