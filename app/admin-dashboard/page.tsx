@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import API from "@/app/lib/api";
 
@@ -10,16 +10,14 @@ export default function AdminDashboard() {
   const [title, setTitle] = useState("");
   const [tests, setTests] = useState<any[]>([]);
   const [editId, setEditId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // ✅ PROTECT ADMIN (FIXED ROLE CHECK)
+  // 🔐 Admin protect
   useEffect(() => {
     const check = async () => {
       try {
         const { data } = await API.get("/user/profile");
 
-        console.log("PROFILE:", data);
-
-        // ✅ FIX HERE
         const role = data?.role || data?.user?.role;
 
         if (role !== "admin") {
@@ -33,13 +31,15 @@ export default function AdminDashboard() {
     check();
   }, []);
 
-  // ✅ LOAD TESTS
+  // 🔄 Load tests
   const loadTests = async () => {
     try {
       const { data } = await API.get("/tests");
       setTests(data);
     } catch (err) {
-      console.error("Error loading tests", err);
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,17 +47,15 @@ export default function AdminDashboard() {
     loadTests();
   }, []);
 
-  // ✅ CREATE / UPDATE TEST
+  // ➕ Create / Update
   const handleSave = async () => {
     if (!title) return alert("Enter test title");
 
     try {
       if (editId) {
         await API.put(`/test/${editId}`, { title });
-        alert("Test Updated ✅");
       } else {
         await API.post("/test/create", { title });
-        alert("Test Created ✅");
       }
 
       setTitle("");
@@ -68,42 +66,43 @@ export default function AdminDashboard() {
     }
   };
 
-  // ❌ DELETE TEST
+  // ❌ Delete
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete this test?")) return;
+    if (!confirm("Delete test?")) return;
 
     try {
       await API.delete(`/test/${id}`);
       loadTests();
     } catch {
-      alert("Error deleting test");
+      alert("Delete failed");
     }
   };
 
-  // ✏️ EDIT CLICK
+  // ✏️ Edit
   const handleEdit = (test: any) => {
     setTitle(test.title);
     setEditId(test._id);
   };
 
-  // 🚪 LOGOUT
+  // 🚪 Logout
   const handleLogout = async () => {
-    try {
-      await API.post("/user/logout");
-    } catch {}
+    await API.post("/user/logout");
+    localStorage.removeItem("role");
     router.replace("/login");
   };
+
+  if (loading) return <p className="p-6">Loading...</p>;
 
   return (
     <div className="flex min-h-screen">
 
-      {/* LEFT MENU */}
-      <div className="w-1/4 bg-gray-100 p-4 space-y-4">
-        <h2 className="font-bold text-lg mb-4">Admin Panel</h2>
+      {/* Sidebar */}
+      <div className="w-1/4 bg-gray-100 p-4 space-y-3">
+        <h2 className="font-bold text-lg">Admin Panel</h2>
 
         <button
           onClick={() => router.push("/admin-dashboard")}
-          className="bg-white p-3 rounded shadow w-full text-left hover:bg-gray-200"
+          className="bg-white p-3 w-full rounded"
         >
           Dashboard
         </button>
@@ -114,43 +113,19 @@ export default function AdminDashboard() {
               router.push(`/admin-dashboard/${tests[0]._id}`);
             }
           }}
-          className="bg-white p-3 rounded shadow w-full text-left hover:bg-gray-200"
+          className="bg-white p-3 w-full rounded"
         >
-          Create Questions
-        </button>
-
-        <button className="bg-white p-3 rounded shadow w-full text-left hover:bg-gray-200">
-          Grading
-        </button>
-
-        <button className="bg-white p-3 rounded shadow w-full text-left hover:bg-gray-200">
-          Test Sections
-        </button>
-
-        <button className="bg-white p-3 rounded shadow w-full text-left hover:bg-gray-200">
-          Import Questions
-        </button>
-
-        <button className="bg-white p-3 rounded shadow w-full text-left hover:bg-gray-200">
-          Test Settings
+          Questions
         </button>
       </div>
 
-      {/* RIGHT CONTENT */}
+      {/* Content */}
       <div className="w-3/4 p-6">
 
-        {/* HEADER */}
-        <div className="flex justify-between items-center mb-4">
-
-          <div className="flex items-center gap-3">
-            <span className="bg-black text-white px-3 py-1 rounded">
-              Admin
-            </span>
-
-            <h1 className="text-2xl font-bold">
-              {editId ? "Edit Test" : "Create Test"}
-            </h1>
-          </div>
+        <div className="flex justify-between mb-4">
+          <h1 className="text-2xl font-bold">
+            {editId ? "Edit Test" : "Create Test"}
+          </h1>
 
           <button
             onClick={handleLogout}
@@ -160,64 +135,52 @@ export default function AdminDashboard() {
           </button>
         </div>
 
-        {/* INPUT */}
+        {/* Input */}
         <input
-          type="text"
-          placeholder="Enter Test Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full border p-2 mb-4 rounded"
+          placeholder="Test Title"
+          className="w-full border p-2 mb-4"
         />
 
-        {/* SAVE BUTTON */}
         <button
           onClick={handleSave}
           className="bg-blue-600 text-white px-4 py-2 rounded mb-6"
         >
-          {editId ? "Update Test" : "Create Test"}
+          {editId ? "Update" : "Create"}
         </button>
 
-        {/* TEST LIST */}
-        <h2 className="text-xl font-semibold mb-3">All Tests</h2>
+        {/* List */}
+        {tests.map((t) => (
+          <div key={t._id} className="border p-3 mb-2 flex justify-between">
+            <span>{t.title}</span>
 
-        <div className="space-y-3">
-          {tests.map((test) => (
-            <div
-              key={test._id}
-              className="border p-3 rounded flex justify-between items-center"
-            >
-              <span>{test.title}</span>
+            <div className="flex gap-2">
+              <button
+                onClick={() =>
+                  router.push(`/admin-dashboard/${t._id}`)
+                }
+                className="bg-green-500 text-white px-2"
+              >
+                Questions
+              </button>
 
-              <div className="flex gap-2">
+              <button
+                onClick={() => handleEdit(t)}
+                className="bg-yellow-500 px-2"
+              >
+                Edit
+              </button>
 
-                <button
-                  onClick={() =>
-                    router.push(`/admin-dashboard/${test._id}`)
-                  }
-                  className="bg-green-500 text-white px-3 py-1 rounded"
-                >
-                  Questions
-                </button>
-
-                <button
-                  onClick={() => handleEdit(test)}
-                  className="bg-yellow-500 text-white px-3 py-1 rounded"
-                >
-                  Edit
-                </button>
-
-                <button
-                  onClick={() => handleDelete(test._id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded"
-                >
-                  Delete
-                </button>
-
-              </div>
+              <button
+                onClick={() => handleDelete(t._id)}
+                className="bg-red-500 text-white px-2"
+              >
+                Delete
+              </button>
             </div>
-          ))}
-        </div>
-
+          </div>
+        ))}
       </div>
     </div>
   );
