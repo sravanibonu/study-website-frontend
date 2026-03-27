@@ -12,18 +12,23 @@ export default function AdminDashboard() {
   const [editId, setEditId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔐 Admin protect
+  // 🔐 Admin protect (FIXED 🔥)
   useEffect(() => {
     const check = async () => {
       try {
-        const { data } = await API.get("/user/profile");
+        const { data } = await API.get("/user/profile", {
+          withCredentials: true, // ✅ IMPORTANT
+        });
 
-        const role = data?.role || data?.user?.role;
+        const role = (data?.role || data?.user?.role)?.toLowerCase();
+
+        console.log("ADMIN ROLE:", role);
 
         if (role !== "admin") {
           router.replace("/login");
         }
-      } catch {
+      } catch (err) {
+        console.log("Profile error:", err);
         router.replace("/login");
       }
     };
@@ -31,10 +36,12 @@ export default function AdminDashboard() {
     check();
   }, [router]);
 
-  // 🔄 Load tests
+  // 🔄 Load tests (FIXED 🔥)
   const loadTests = async () => {
     try {
-      const { data } = await API.get("/tests");
+      const { data } = await API.get("/tests", {
+        withCredentials: true, // ✅ IMPORTANT
+      });
       setTests(data);
     } catch (err) {
       console.error(err);
@@ -53,9 +60,9 @@ export default function AdminDashboard() {
 
     try {
       if (editId) {
-        await API.put(`/test/${editId}`, { title });
+        await API.put(`/test/${editId}`, { title }, { withCredentials: true });
       } else {
-        await API.post("/test/create", { title });
+        await API.post("/test/create", { title }, { withCredentials: true });
       }
 
       setTitle("");
@@ -71,7 +78,7 @@ export default function AdminDashboard() {
     if (!confirm("Delete test?")) return;
 
     try {
-      await API.delete(`/test/${id}`);
+      await API.delete(`/test/${id}`, { withCredentials: true });
       loadTests();
     } catch {
       alert("Delete failed");
@@ -86,7 +93,7 @@ export default function AdminDashboard() {
 
   // 🚪 Logout
   const handleLogout = async () => {
-    await API.post("/user/logout");
+    await API.post("/user/logout", {}, { withCredentials: true });
     localStorage.removeItem("role");
     router.replace("/login");
   };

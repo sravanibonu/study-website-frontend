@@ -1,7 +1,7 @@
 "use client";
 
 import API from "@/app/lib/api";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Mail, Lock, LogIn } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -9,18 +9,6 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-
-  // ✅ Auto login check (FIXED)
-  useEffect(() => {
-    const role = localStorage.getItem("role");
-
-    if (role === "admin") {
-      router.push("/admin-dashboard");
-    } else if (role === "student") {
-      router.push("/user-dashboard");
-    }
-    // ❌ NO ELSE HERE
-  }, [router]);
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
@@ -38,7 +26,7 @@ export default function LoginPage() {
       // 🔥 SAFE ROLE EXTRACTION
       let role = data?.role || data?.user?.role;
 
-      // 🔥 NORMALIZE
+      // 🔥 NORMALIZE ROLE
       role = role?.toString().toLowerCase();
 
       console.log("FINAL ROLE:", role);
@@ -48,7 +36,7 @@ export default function LoginPage() {
         return;
       }
 
-      // 🔥 STORE CLEAN ROLE
+      // 🔥 STORE & REDIRECT
       if (role === "admin") {
         localStorage.setItem("role", "admin");
         router.replace("/admin-dashboard");
