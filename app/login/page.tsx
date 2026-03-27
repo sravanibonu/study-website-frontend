@@ -10,18 +10,16 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  // ✅ Auto login check
+  // ✅ Auto login check (FIXED)
   useEffect(() => {
     const role = localStorage.getItem("role");
 
     if (role === "admin") {
-      router.push("/admin-dashboard"); // ✅ correct route
-    } else if ( role == "student"){
-      router.push("/user-dashboard"); // ✅ FIXED (student → user)
+      router.push("/admin-dashboard");
+    } else if (role === "student") {
+      router.push("/user-dashboard");
     }
-    else {
-      alert("Invalid role");
-    }
+    // ❌ NO ELSE HERE
   }, [router]);
 
   const handleLogin = async (e: any) => {
@@ -37,23 +35,30 @@ export default function LoginPage() {
       const data = res.data;
       console.log("Login Response:", data);
 
-      // ✅ role correct ga fetch
-      const role = data?.role || data?.user?.role;
+      // 🔥 SAFE ROLE EXTRACTION
+      let role = data?.role || data?.user?.role;
+
+      // 🔥 NORMALIZE
+      role = role?.toString().toLowerCase();
+
+      console.log("FINAL ROLE:", role);
 
       if (!role) {
         alert("Role not found");
         return;
       }
 
-      // ✅ store role
-      localStorage.setItem("role", role);
-
-      // ✅ correct redirect
+      // 🔥 STORE CLEAN ROLE
       if (role === "admin") {
+        localStorage.setItem("role", "admin");
         router.replace("/admin-dashboard");
-      } else if (role == "student"){ 
-        router.replace("/user-dashboard"); // 🔥 FIXED
+
+      } else if (role === "student" || role === "user") {
+        localStorage.setItem("role", "student"); // normalize
+        router.replace("/user-dashboard");
+
       } else {
+        console.log("Unknown role:", role);
         alert("Invalid role");
       }
 
