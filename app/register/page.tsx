@@ -131,7 +131,7 @@ export default function RegisterPage() {
             }
             className="w-full p-3 outline-none bg-white"
           >
-            <option value="student">User</option>
+            <option value="student">Student</option> {/* 🔥 FIX */}
             <option value="admin">Admin</option>
           </select>
         </div>
