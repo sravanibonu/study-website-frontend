@@ -15,9 +15,9 @@ export default function LoginPage() {
     const role = localStorage.getItem("role");
 
     if (role === "admin") {
-      router.push("/admin-dashboard"); // ✅ FIXED
-    } else if (role === "student") {
-      router.push("/user-dashboard"); // ✅ FIXED
+      router.push("/admin/dashboard"); // ✅ correct route
+    } else if (role === "user") {
+      router.push("/user-dashboard"); // ✅ FIXED (student → user)
     }
   }, [router]);
 
@@ -27,38 +27,33 @@ export default function LoginPage() {
     try {
       const res = await API.post(
         "/user/login",
-        {
-          email,
-          password,
-        },
-        {
-          withCredentials: true, // ✅ cookies
-        }
+        { email, password },
+        { withCredentials: true }
       );
 
       const data = res.data;
       console.log("Login Response:", data);
 
-      // ✅ Role fetch (safe way)
+      // ✅ role correct ga fetch
       const role = data?.role || data?.user?.role;
 
       if (!role) {
         alert("Role not found");
-        return; // ✅ stop loop
-      }
-
-      // ✅ Save role
-      localStorage.setItem("role", role);
-
-      // ✅ Correct redirects
-      if (role === "admin") {
-        router.replace("/admin-dashboard"); // ✅ FIXED
-      } else if (role === "student") {
-        router.replace("/user-dashboard"); // ✅ FIXED
-      } else {
-        alert("Invalid role");
         return;
       }
+
+      // ✅ store role
+      localStorage.setItem("role", role);
+
+      // ✅ correct redirect
+      if (role === "admin") {
+        router.replace("/admin/dashboard");
+      } else if (role === "user") {
+        router.replace("/user-dashboard"); // 🔥 FIXED
+      } else {
+        alert("Invalid role");
+      }
+
     } catch (err: any) {
       alert(err?.response?.data?.message || "Login failed");
     }

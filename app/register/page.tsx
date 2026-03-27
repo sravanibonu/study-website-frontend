@@ -3,12 +3,13 @@
 import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { User, Mail, Lock, UserPlus } from "lucide-react";
-import API from "@/app/lib/api"; // ✅ updated import
+import API from "@/app/lib/api";
 
 interface RegisterForm {
   name: string;
   email: string;
   password: string;
+  role: string;
 }
 
 export default function RegisterPage() {
@@ -18,12 +19,13 @@ export default function RegisterPage() {
     name: "",
     email: "",
     password: "",
+    role: "user",
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // ✅ FIXED: Check user via cookies (not localStorage)
+  // ✅ Check if already logged in
   useEffect(() => {
     const checkUser = async () => {
       try {
@@ -32,7 +34,7 @@ export default function RegisterPage() {
           router.push("/user-dashboard");
         }
       } catch {
-        // not logged in → do nothing
+        // not logged in
       }
     };
 
@@ -45,12 +47,8 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      // ✅ Register API
       await API.post("/user/register", form);
-
-      // ✅ After register → go to login
       router.push("/login");
-
     } catch (err: any) {
       setError(
         err?.response?.data?.message ||
@@ -109,7 +107,7 @@ export default function RegisterPage() {
         </div>
 
         {/* Password */}
-        <div className="flex items-center border rounded-lg mb-6 px-3">
+        <div className="flex items-center border rounded-lg mb-4 px-3">
           <Lock className="text-gray-400 mr-2" size={20} />
           <input
             type="password"
@@ -122,6 +120,20 @@ export default function RegisterPage() {
               setForm({ ...form, password: e.target.value })
             }
           />
+        </div>
+
+        {/* Role */}
+        <div className="flex items-center border rounded-lg mb-6 px-3">
+          <select
+            value={form.role}
+            onChange={(e) =>
+              setForm({ ...form, role: e.target.value })
+            }
+            className="w-full p-3 outline-none bg-white"
+          >
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
         </div>
 
         {/* Button */}
