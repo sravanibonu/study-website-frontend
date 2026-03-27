@@ -19,7 +19,7 @@ export default function RegisterPage() {
     name: "",
     email: "",
     password: "",
-    role: "user",
+    role: "student",
   });
 
   const [loading, setLoading] = useState(false);
@@ -131,7 +131,7 @@ export default function RegisterPage() {
             }
             className="w-full p-3 outline-none bg-white"
           >
-            <option value="user">User</option>
+            <option value="student">User</option>
             <option value="admin">Admin</option>
           </select>
         </div>

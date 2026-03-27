@@ -16,8 +16,11 @@ export default function LoginPage() {
 
     if (role === "admin") {
       router.push("/admin-dashboard"); // ✅ correct route
-    } else if (role === "user" || role == "student"){
+    } else if ( role == "student"){
       router.push("/user-dashboard"); // ✅ FIXED (student → user)
+    }
+    else {
+      alert("Invalid role");
     }
   }, [router]);
 
@@ -48,7 +51,7 @@ export default function LoginPage() {
       // ✅ correct redirect
       if (role === "admin") {
         router.replace("/admin-dashboard");
-      } else if (role === "user" || role == "student"){ 
+      } else if (role == "student"){ 
         router.replace("/user-dashboard"); // 🔥 FIXED
       } else {
         alert("Invalid role");
