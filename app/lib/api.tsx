@@ -2,10 +2,10 @@ import axios from "axios";
 
 const API = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  withCredentials: true, // cookies support (if backend uses it)
+  withCredentials: true, // ✅ cookies support
 });
 
-// ✅ REQUEST INTERCEPTOR (VERY IMPORTANT)
+// ✅ REQUEST INTERCEPTOR
 API.interceptors.request.use(
   (req) => {
     const token = localStorage.getItem("token");
@@ -17,24 +17,24 @@ API.interceptors.request.use(
 
     return req;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// ✅ RESPONSE INTERCEPTOR (optional but useful)
+// ✅ RESPONSE INTERCEPTOR (FIXED 🚀)
 API.interceptors.response.use(
   (res) => res,
   (error) => {
     console.log("API Error:", error?.response?.data || error.message);
 
-    // 🔥 If unauthorized → redirect to login
+    // 🔥 Handle unauthorized (NO redirect here ❌)
     if (error?.response?.status === 401) {
+      console.warn("Unauthorized - clearing session");
+
+      // clear storage
       localStorage.removeItem("token");
       localStorage.removeItem("role");
 
-      // optional redirect
-      window.location.href = "/login";
+      // ❌ DO NOT redirect here (causes infinite loop)
     }
 
     return Promise.reject(error);
