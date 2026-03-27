@@ -21,7 +21,7 @@ export default function UserDashboard() {
 
         const role = data?.role || data?.user?.role;
 
-        if (role !== "user") {
+        if (role !== "user" && role !== "student") { 
           router.replace("/login");
         }
       } catch {
