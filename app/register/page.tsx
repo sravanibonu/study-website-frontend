@@ -5,17 +5,10 @@ import { useRouter } from "next/navigation";
 import { User, Mail, Lock, UserPlus } from "lucide-react";
 import API from "@/app/lib/api";
 
-interface RegisterForm {
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-}
-
 export default function RegisterPage() {
   const router = useRouter();
 
-  const [form, setForm] = useState<RegisterForm>({
+  const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
@@ -25,136 +18,65 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // ✅ Check if already logged in
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const { data } = await API.get("/user/profile");
-        if (data) {
-          router.push("/user-dashboard");
-        }
-      } catch {
-        // not logged in
-      }
+        await API.get("/user/profile", { withCredentials: true });
+        router.push("/user-dashboard");
+      } catch {}
     };
-
     checkUser();
   }, [router]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
     setLoading(true);
 
     try {
       await API.post("/user/register", form);
       router.push("/login");
     } catch (err: any) {
-      setError(
-        err?.response?.data?.message ||
-        err?.message ||
-        "Registration failed"
-      );
+      setError(err?.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 px-4">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-10 shadow-2xl rounded-2xl w-full max-w-md"
-      >
-        <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
-          Create Account
-        </h2>
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600">
+      <form onSubmit={handleSubmit} className="bg-white p-10 rounded-2xl w-full max-w-md">
+        <h2 className="text-3xl font-bold mb-6 text-center">Register</h2>
 
-        {error && (
-          <div className="bg-red-100 text-red-600 p-3 mb-4 rounded text-sm">
-            {error}
-          </div>
-        )}
+        <input
+          placeholder="Name"
+          className="border p-3 w-full mb-3"
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+        />
 
-        {/* Name */}
-        <div className="flex items-center border rounded-lg mb-4 px-3">
-          <User className="text-gray-400 mr-2" size={20} />
-          <input
-            type="text"
-            placeholder="Full Name"
-            required
-            className="w-full p-3 outline-none"
-            value={form.name}
-            onChange={(e) =>
-              setForm({ ...form, name: e.target.value })
-            }
-          />
-        </div>
+        <input
+          placeholder="Email"
+          className="border p-3 w-full mb-3"
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+        />
 
-        {/* Email */}
-        <div className="flex items-center border rounded-lg mb-4 px-3">
-          <Mail className="text-gray-400 mr-2" size={20} />
-          <input
-            type="email"
-            placeholder="Email"
-            required
-            className="w-full p-3 outline-none"
-            value={form.email}
-            onChange={(e) =>
-              setForm({ ...form, email: e.target.value })
-            }
-          />
-        </div>
+        <input
+          type="password"
+          placeholder="Password"
+          className="border p-3 w-full mb-3"
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
+        />
 
-        {/* Password */}
-        <div className="flex items-center border rounded-lg mb-4 px-3">
-          <Lock className="text-gray-400 mr-2" size={20} />
-          <input
-            type="password"
-            placeholder="Password"
-            required
-            minLength={6}
-            className="w-full p-3 outline-none"
-            value={form.password}
-            onChange={(e) =>
-              setForm({ ...form, password: e.target.value })
-            }
-          />
-        </div>
-
-        {/* Role */}
-        <div className="flex items-center border rounded-lg mb-6 px-3">
-          <select
-            value={form.role}
-            onChange={(e) =>
-              setForm({ ...form, role: e.target.value })
-            }
-            className="w-full p-3 outline-none bg-white"
-          >
-            <option value="student">Student</option> {/* 🔥 FIX */}
-            <option value="admin">Admin</option>
-          </select>
-        </div>
-
-        {/* Button */}
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg transition disabled:opacity-50"
+        <select
+          className="border p-3 w-full mb-4"
+          onChange={(e) => setForm({ ...form, role: e.target.value })}
         >
-          <UserPlus size={18} />
-          {loading ? "Creating Account..." : "Register"}
-        </button>
+          <option value="student">Student</option>
+          <option value="admin">Admin</option>
+        </select>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
-          Already have an account?{" "}
-          <span
-            className="text-blue-600 cursor-pointer hover:underline"
-            onClick={() => router.push("/login")}
-          >
-            Login
-          </span>
-        </p>
+        <button className="bg-blue-600 text-white w-full p-3 rounded">
+          {loading ? "Loading..." : "Register"}
+        </button>
       </form>
     </div>
   );
